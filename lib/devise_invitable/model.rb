@@ -166,9 +166,9 @@ module Devise
         # Returns a record, if it has no errors, the invitation has been sent
         #   to its email.
         def invite(attributes = {})
-          invitable = find_or_initialize_with_error_by(:email, attributes[:email])
+          invitable = find_or_initialize_by_email_and_subdomain(attributes[:email], attributes[:subdomain])
           invitable.attributes = attributes
-          
+        
           if invitable.persisted? && !invitable.invited?
             invitable.errors.add(:email, :taken)
           elsif invitable.email.present? && invitable.email.match(Devise.email_regexp)
